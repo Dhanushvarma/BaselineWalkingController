@@ -122,6 +122,9 @@ public:
       //! Whether to enable online footstep update during swing in the velocity mode
       bool enableOnlineFootstepUpdate = true;
 
+      //! Foot that steps first when the velocity mode starts (the feet alternate from it)
+      Foot firstFoot = Foot::Left;
+
       /** \brief Load mc_rtc configuration.
           \param mcRtcConfig mc_rtc configuration
       */

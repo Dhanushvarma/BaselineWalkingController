@@ -151,6 +151,7 @@ FootManager:
   VelMode:
     footstepQueueSize: 3
     enableOnlineFootstepUpdate: true
+    firstFoot: Left
   SwingTraj:
     CubicSplineSimple:
       withdrawDurationRatio: 0.25

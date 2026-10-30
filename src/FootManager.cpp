@@ -83,6 +83,10 @@ void FootManager::VelModeData::Configuration::load(const mc_rtc::Configuration &
     }
   }
   mcRtcConfig("enableOnlineFootstepUpdate", enableOnlineFootstepUpdate);
+  if(mcRtcConfig.has("firstFoot"))
+  {
+    firstFoot = strToFoot(mcRtcConfig("firstFoot"));
+  }
 }
 
 void FootManager::VelModeData::reset(bool enabled)
@@ -288,7 +292,10 @@ void FootManager::addToGUI(mc_rtc::gui::StateBuilder & gui)
           "enableOnlineFootstepUpdate", [this]() { return velModeData_.config_.enableOnlineFootstepUpdate; },
           [this]() {
             velModeData_.config_.enableOnlineFootstepUpdate = !velModeData_.config_.enableOnlineFootstepUpdate;
-          }));
+          }),
+      mc_rtc::gui::ComboInput(
+          "firstFoot", {"Left", "Right"}, [this]() { return std::to_string(velModeData_.config_.firstFoot); },
+          [this](const std::string & v) { velModeData_.config_.firstFoot = strToFoot(v); }));
 
   for(const auto & impGainKV : config_.impGains)
   {
@@ -689,7 +696,7 @@ bool FootManager::startVelMode()
   velModeData_.reset(true);
 
   // Add footsteps to queue for walking in place
-  Foot foot = Foot::Left;
+  Foot foot = velModeData_.config_.firstFoot;
   const sva::PTransformd & footMidpose =
       projGround(sva::interpolate(targetFootPoses_.at(Foot::Left), targetFootPoses_.at(Foot::Right), 0.5));
   double startTime = ctl().t() + 1.0;
